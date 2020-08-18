@@ -1,0 +1,17 @@
+//add where quantity field is located
+{% if pro_flavour contains 'Flavour:' %}
+   <div class="product-form__controls-group">
+      <div class="selector-wrapper js product-form__item">
+         {% include 'shopify_api' %}
+      </div>
+   </div>
+ {% else %}
+   {% if section.settings.show_quantity_selector %}
+   <div class="product-form__controls-group">
+      <div class="product-form__item">
+          <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+          <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" pattern="[0-9]*" class="product-form__input product-form__input--quantity" data-quantity-input>
+      </div>
+   </div>
+   {% endif %}
+{% endif %}

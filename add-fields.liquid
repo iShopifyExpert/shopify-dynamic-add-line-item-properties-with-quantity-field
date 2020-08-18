@@ -1,3 +1,4 @@
+{% capture pro_qlimit %}{% for qlimit in product.tags %}{% if qlimit contains 'Qty:' %}{{qlimit | remove: 'Qty:'}}{% endif %}{% endfor %}{% endcapture %}
 <div class="flavour_wrap">
   <button class="add_flavour_button">Add More Flavors</button>
   <div class="flavor-field">
@@ -13,7 +14,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-    var max_fields      = 6; //maximum input boxes allowed
+    var max_fields      = {% if pro_qlimit != blank %}{{pro_qlimit | strip}}{% else %}6{% endif %}; //maximum input boxes allowed
     var wrapper   		= $(".flavour_wrap"); //Fields wrapper
     var add_button      = $(".add_flavour_button"); //Add button ID
     var x = 1; //initlal text box count

@@ -1,0 +1,79 @@
+<div class="flavour_wrap">
+  <button class="add_flavour_button">Add More Flavors</button>
+  <div class="flavor-field">
+    <select class="product-form__input flavour-select" id="flavour-1">
+      {% for flavor in product.tags %}{% if flavor contains 'Flavour:' %}
+      <option value="{{flavor | remove: 'Flavour:'}}" {% if forloop.first %}selected="selected"{% endif %}>{{flavor | remove: 'Flavour:'}}</option>
+      {% endif %}{% endfor %}
+    </select>
+    <input type="number" class="product-form__input product-form__input--quantity flavour-qty" id="qty-1" value="0" min="1" max="6" placeholder="Qty">
+    <input type="hidden" class="fproperty" name="properties[Flavors 1]" value="0" placeholder="Qty">
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    var max_fields      = 6; //maximum input boxes allowed
+    var wrapper   		= $(".flavour_wrap"); //Fields wrapper
+    var add_button      = $(".add_flavour_button"); //Add button ID
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+      e.preventDefault();
+      if(x < max_fields){ //max input box allowed
+        x++; //text box increment
+        $(wrapper).append('<div class="flavor-field"><select class="product-form__input flavour-select" id="flavour-'+x+'">{% for flavor in product.tags %}{% if flavor contains 'Flavour:' %}<option value="{{flavor | remove: 'Flavour:'}}" {% if forloop.first %}selected="selected"{% endif %}>{{flavor | remove: 'Flavour:'}}</option>{% endif %}{% endfor %}</select><input type="number" class="product-form__input product-form__input--quantity flavour-qty" id="qty-'+x+'" value="0" min="1" max="6" placeholder="Qty"><input type="hidden" class="fproperty" name="properties[Flavors '+x+']" value="0" placeholder="Qty"><a href="#" class="remove_field">{% include 'icon-close' %}</a></div>');
+      }
+    });
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+      e.preventDefault(); $(this).parent('.flavor-field').remove(); x--;
+    })
+    $('.flavor-field').each(function() {
+      $(document).on('change', '.flavour-select', function() {
+        var flavorfield = $(this).parents('.flavor-field');
+        var flavourselect = $(this).val();
+        var flavourqty = flavorfield.find('.flavour-qty').val();
+        flavorfield.find('.fproperty').val(flavourselect+' '+flavourqty).attr('value', flavourselect+' '+flavourqty);
+      });
+      $(document).on('change', '.flavour-qty', function() {
+        var flavorfield = $(this).parents('.flavor-field');
+        var flavourselect = flavorfield.find('.flavour-select').val();
+        var flavourqty = $(this).val();
+        flavorfield.find('.fproperty').val(flavourselect+' '+flavourqty).attr('value', flavourselect+' '+flavourqty);
+      });
+    });
+  });
+</script>
+<style>
+  .flavour-select {
+    float: left;
+    width: 70%;
+  }
+  .flavour-qty {
+    width: 30%;
+  }
+  .flavor-field {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin: 10px 0;
+  }
+  button.add_flavour_button {
+    display: block;
+    width: 100%;
+    line-height: 1.4;
+    padding-left: 5px;
+    border: 0;
+    padding-right: 5px;
+    white-space: normal;
+    margin-top: 0;
+    margin-bottom: 10px;
+    min-height: 44px;
+    color: #fff;
+    background-color: #3a3a3a;
+  }
+  a.remove_field {
+    position: absolute;
+    right: -30px;
+    top: 10px;
+  }
+</style>
